@@ -36,20 +36,44 @@ interface SandookDao {
     @Query("SELECT * FROM savings_goal ORDER BY createdAt DESC")
     fun getAllSavingsGoals(): Flow<List<SavingsGoal>>
 
+    @Query("SELECT * FROM savings_goal WHERE id = :id LIMIT 1")
+    fun getSavingsGoalById(id: Int): Flow<SavingsGoal?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSavingsGoal(goal: SavingsGoal)
 
     @Update
     suspend fun updateSavingsGoal(goal: SavingsGoal)
 
+    @Delete
+    suspend fun deleteSavingsGoal(goal: SavingsGoal)
+
     @Query("DELETE FROM savings_goal WHERE id = :id")
     suspend fun deleteSavingsGoalById(id: Int)
+
+    @Query("SELECT SUM(savedAmount) FROM savings_goal")
+    fun getTotalSavedInGoals(): Flow<Double?>
+
+    @Query("SELECT SUM(targetAmount) FROM savings_goal")
+    fun getTotalTargetGoalsAmount(): Flow<Double?>
 
     @Query("SELECT * FROM wallet_transaction ORDER BY timestamp DESC")
     fun getAllTransactions(): Flow<List<WalletTransaction>>
 
+    @Query("SELECT * FROM wallet_transaction WHERE type = :type ORDER BY timestamp DESC")
+    fun getTransactionsByType(type: String): Flow<List<WalletTransaction>>
+
+    @Query("SELECT * FROM wallet_transaction ORDER BY timestamp DESC LIMIT :limit")
+    fun getRecentTransactions(limit: Int): Flow<List<WalletTransaction>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: WalletTransaction)
+
+    @Query("DELETE FROM wallet_transaction WHERE id = :id")
+    suspend fun deleteTransactionById(id: Int)
+
+    @Query("DELETE FROM wallet_transaction")
+    suspend fun clearAllTransactions()
 
     @Query("SELECT * FROM app_notification ORDER BY timestamp DESC")
     fun getAllNotifications(): Flow<List<AppNotification>>
