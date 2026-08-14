@@ -1,0 +1,6 @@
+{
+  "name": "Sandook",
+  "description": "Sandook is a personal savings app that helps users automatically save money daily, weekly, or monthly.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
